@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI-Powered Intelligent Crowd Management & Public Safety System</title>
+  <script>
+    // Seamless routing to dashboard or login based on active JWT session
+    const token = localStorage.getItem('crowd_safety_token');
+    if (token) {
+      window.location.replace('dashboard.html');
+    } else {
+      window.location.replace('login.html');
+    }
+  </script>
+</head>
+<body style="background: #0b0f19; color: #94a3b8; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0;">
+  <p>Redirecting to security surveillance portal...</p>
+</body>
+</html>

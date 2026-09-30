@@ -1,0 +1,80 @@
+/* ==========================================================
+   AI CROWD MANAGEMENT & PUBLIC SAFETY MONITORING SYSTEM
+   Responsive Stylesheet
+   ========================================================== */
+
+/* Mobile Navigation Toggle Button */
+.mobile-nav-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 1.35rem;
+  cursor: pointer;
+}
+
+@media (max-width: 1024px) {
+  .dashboard-main-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .bottom-split-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .live-console-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .mobile-nav-toggle {
+    display: block;
+  }
+
+  .sidebar {
+    transform: translateX(-100%);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .main-wrapper {
+    margin-left: 0;
+  }
+
+  .content-body {
+    padding: 1.25rem;
+  }
+
+  .topbar {
+    padding: 0 1.25rem;
+  }
+
+  .telemetry-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .telemetry-cell:nth-child(2) {
+    border-right: none;
+  }
+
+  .telemetry-cell:nth-child(3),
+  .telemetry-cell:nth-child(4) {
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .camera-cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .page-action-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-filter-box {
+    max-width: 100%;
+  }
+}

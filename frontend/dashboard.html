@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Surveillance Dashboard | AI Crowd & Public Safety System</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="app-sidebar">
+      <div class="sidebar-header">
+        <div class="brand-icon">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">CROWD SAFETY</span>
+          <span class="brand-badge">AI Surveillance</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-category">Surveillance Operations</div>
+        <a href="dashboard.html" class="nav-link active">
+          <i class="fas fa-th-large"></i>
+          <span>Command Center</span>
+        </a>
+        <a href="live-monitoring.html" class="nav-link">
+          <i class="fas fa-video"></i>
+          <span>Live Monitoring</span>
+        </a>
+        <a href="cameras.html" class="nav-link">
+          <i class="fas fa-camera-retro"></i>
+          <span>Camera Management</span>
+        </a>
+
+        <div class="nav-category">System Configuration</div>
+        <a href="settings.html" class="nav-link">
+          <i class="fas fa-sliders"></i>
+          <span>Safety Thresholds</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-profile-badge">
+          <div class="user-avatar" id="current-user-avatar">A</div>
+          <div class="user-info">
+            <div class="user-name" id="current-user-name">System Admin</div>
+            <div class="user-role" id="current-user-role">ADMIN</div>
+          </div>
+          <button class="logout-btn" id="btn-logout" title="Sign Out">
+            <i class="fas fa-arrow-right-from-bracket"></i>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Wrapper -->
+    <div class="main-wrapper">
+      <!-- Top Navigation Bar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="mobile-nav-toggle" id="btn-mobile-toggle">
+            <i class="fas fa-bars"></i>
+          </button>
+          <h1 class="page-title">Surveillance Command Center</h1>
+        </div>
+
+        <div class="topbar-right">
+          <div class="status-indicator">
+            <span class="status-dot"></span>
+            <span id="stat-system-status">OPTIMAL</span>
+          </div>
+          <div class="badge badge-online" style="font-family: var(--font-mono); font-size: 0.7rem;">
+            DB: <span id="stat-db-status">POSTGRESQL</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Dashboard Content Body -->
+      <main class="content-body">
+        <!-- Top Metrics Cards -->
+        <section class="stats-grid">
+          <div class="card stat-card">
+            <div class="stat-icon-wrapper stat-icon-cyan">
+              <i class="fas fa-video"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-label">Surveillance Nodes</div>
+              <div class="stat-value" id="stat-total-cams">0</div>
+              <div class="stat-sub">Registered Cameras</div>
+            </div>
+          </div>
+
+          <div class="card stat-card">
+            <div class="stat-icon-wrapper stat-icon-green">
+              <i class="fas fa-satellite-dish"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-label">Online Feeds</div>
+              <div class="stat-value" id="stat-online-cams">0 / 0</div>
+              <div class="stat-sub">Active Video Channels</div>
+            </div>
+          </div>
+
+          <div class="card stat-card">
+            <div class="stat-icon-wrapper stat-icon-amber">
+              <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-label">Current Pedestrians</div>
+              <div class="stat-value" id="stat-current-people">0</div>
+              <div class="stat-sub">Real-time Influx</div>
+            </div>
+          </div>
+
+          <div class="card stat-card">
+            <div class="stat-icon-wrapper stat-icon-red">
+              <i class="fas fa-bell"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-label">Active Alerts</div>
+              <div class="stat-value" id="stat-active-alerts">0</div>
+              <div class="stat-sub">Safety Discrepancies</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Prompt Section 20 Specific Layout -->
+        <section class="dashboard-main-grid">
+          <!-- Live CCTV Preview Card -->
+          <div class="card cctv-preview-card">
+            <div class="cctv-preview-header">
+              <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600; font-size: 0.95rem;">
+                <i class="fas fa-broadcast-tower" style="color: var(--accent-cyan);"></i>
+                <span id="dashboard-stream-cam-name">Main Entrance CCTV</span>
+              </div>
+              <div class="cctv-live-badge">LIVE CCTV PREVIEW</div>
+            </div>
+
+            <div class="cctv-viewport-box">
+              <img 
+                id="dashboard-stream-img" 
+                class="cctv-stream-img" 
+                src="" 
+                alt="Live CCTV Monitoring Preview"
+              />
+              <div class="cctv-overlay-tag">
+                <i class="fas fa-eye" style="color: var(--accent-cyan);"></i>
+                <span>OpenCV MJPEG Pipeline Active</span>
+              </div>
+            </div>
+
+            <!-- Telemetry Row (Prompt Section 20) -->
+            <div class="telemetry-row">
+              <div class="telemetry-cell">
+                <div class="telemetry-title">People</div>
+                <div class="telemetry-value telemetry-val-cyan" id="tele-people">0</div>
+              </div>
+              <div class="telemetry-cell">
+                <div class="telemetry-title">Density</div>
+                <div class="telemetry-value telemetry-val-amber" id="tele-density">LOW</div>
+              </div>
+              <div class="telemetry-cell">
+                <div class="telemetry-title">Congestion</div>
+                <div class="telemetry-value telemetry-val-green" id="tele-congestion">NORMAL</div>
+              </div>
+              <div class="telemetry-cell">
+                <div class="telemetry-title">Active Alerts</div>
+                <div class="telemetry-value telemetry-val-red" id="tele-alerts">0</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Zone Status Breakdown -->
+          <div class="card">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+              <h3 style="font-size: 1rem;">Sector & Zone Status</h3>
+              <span class="badge badge-online">4 Active Zones</span>
+            </div>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 1rem;">
+              Real-time congestion classification by spatial bounding sector.
+            </p>
+
+            <div class="zone-list" id="dashboard-zone-list">
+              <div class="zone-item">
+                <div>
+                  <div class="zone-info-title">Zone A: Main Entrance</div>
+                  <div class="zone-info-sub">Capacity: 75 Pedestrians</div>
+                </div>
+                <span class="badge badge-warning">Medium</span>
+              </div>
+
+              <div class="zone-item">
+                <div>
+                  <div class="zone-info-title">Zone B: Concourse Plaza</div>
+                  <div class="zone-info-sub">Capacity: 120 Pedestrians</div>
+                </div>
+                <span class="badge badge-online">Normal</span>
+              </div>
+
+              <div class="zone-item">
+                <div>
+                  <div class="zone-info-title">Zone C: Escalator Corridor</div>
+                  <div class="zone-info-sub">Capacity: 40 Pedestrians</div>
+                </div>
+                <span class="badge badge-critical">High Congestion</span>
+              </div>
+
+              <div class="zone-item">
+                <div>
+                  <div class="zone-info-title">Zone D: South Exit Gate</div>
+                  <div class="zone-info-sub">Capacity: 80 Pedestrians</div>
+                </div>
+                <span class="badge badge-online">Normal</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Crowd Analytics Graph -->
+        <section class="chart-section">
+          <div class="card chart-card">
+            <div class="chart-header">
+              <div>
+                <h3 style="font-size: 1rem; margin-bottom: 0.25rem;">Crowd Density Trend Over Time</h3>
+                <p style="font-size: 0.75rem; color: var(--text-muted);">
+                  Hourly pedestrian headcount trajectory and peak saturation limits
+                </p>
+              </div>
+              <div style="font-size: 0.75rem; color: var(--accent-cyan); font-family: var(--font-mono);">
+                <i class="fas fa-chart-line"></i> Chart.js Engine
+              </div>
+            </div>
+            <div class="chart-wrapper">
+              <canvas id="crowdChart"></canvas>
+            </div>
+          </div>
+        </section>
+
+        <!-- Recent Safety Alerts Table -->
+        <section class="card">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem;">
+            <div>
+              <h3 style="font-size: 1rem; margin-bottom: 0.25rem;">Recent Security & Safety Events</h3>
+              <p style="font-size: 0.75rem; color: var(--text-muted);">
+                Centralized audit log of system alerts, crowd spikes, and camera offline triggers
+              </p>
+            </div>
+            <a href="cameras.html" class="btn btn-sm btn-secondary">
+              <i class="fas fa-cog"></i> Manage Nodes
+            </a>
+          </div>
+
+          <div class="data-table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Camera Node</th>
+                  <th>Event Description</th>
+                  <th>Severity Level</th>
+                </tr>
+              </thead>
+              <tbody id="recent-alerts-tbody">
+                <!-- Dynamically populated via dashboard.js -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- Main JavaScript Controller -->
+  <script type="module">
+    import { initDashboard } from './js/dashboard.js';
+    import { AuthService } from './js/auth.js';
+
+    document.getElementById('btn-logout').addEventListener('click', () => {
+      AuthService.logout();
+    });
+
+    const mobileToggle = document.getElementById('btn-mobile-toggle');
+    if (mobileToggle) {
+      mobileToggle.addEventListener('click', () => {
+        document.getElementById('app-sidebar').classList.toggle('open');
+      });
+    }
+
+    // Initialize Dashboard
+    initDashboard();
+  </script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security Portal Login | AI Crowd & Public Safety Monitoring</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/login.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body class="login-page">
+  <div class="login-card">
+    <div class="login-header">
+      <div class="login-brand-icon">
+        <i class="fas fa-shield-halved"></i>
+      </div>
+      <h1 class="login-title">Surveillance Command</h1>
+      <p class="login-subtitle">AI-Powered Crowd Management & Safety System</p>
+    </div>
+
+    <!-- Error Alert Box -->
+    <div id="login-error-alert" class="login-alert" role="alert">
+      <i class="fas fa-circle-exclamation"></i>
+      <span id="login-error-message">Invalid credentials.</span>
+    </div>
+
+    <!-- Login Form -->
+    <form id="login-form">
+      <div class="form-group">
+        <label for="email" class="form-label">Security Identifier / Email</label>
+        <div class="search-input-wrap">
+          <i class="fas fa-user-shield"></i>
+          <input 
+            type="email" 
+            id="email" 
+            class="form-control" 
+            placeholder="operator@crowdsafety.ai" 
+            required 
+            autocomplete="email"
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password" class="form-label">Authentication Key / Password</label>
+        <div class="search-input-wrap">
+          <i class="fas fa-key"></i>
+          <input 
+            type="password" 
+            id="password" 
+            class="form-control" 
+            placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" 
+            required 
+            autocomplete="current-password"
+          />
+        </div>
+      </div>
+
+      <button type="submit" id="btn-login-submit" class="btn btn-primary login-btn">
+        <span id="login-btn-text"><i class="fas fa-right-to-bracket"></i> Sign In to Portal</span>
+        <span id="login-btn-spinner" class="spinner" style="display: none;"></span>
+      </button>
+    </form>
+
+    <!-- Quick Demo Credentials for Viva / Evaluation -->
+    <div class="credentials-demo-box">
+      <div style="font-weight: 600; margin-bottom: 0.35rem; color: var(--text-primary);">
+        <i class="fas fa-id-card"></i> Demonstration Accounts:
+      </div>
+      <div><strong>Admin:</strong> admin@crowdsafety.ai / Admin@12345</div>
+      <div><strong>Operator:</strong> operator@crowdsafety.ai / Operator@12345</div>
+      <div style="margin-top: 0.5rem; display: flex; gap: 0.5rem;">
+        <button type="button" class="demo-fill-btn" onclick="fillCredentials('admin@crowdsafety.ai', 'Admin@12345')">
+          Fill Admin
+        </button>
+        <button type="button" class="demo-fill-btn" onclick="fillCredentials('operator@crowdsafety.ai', 'Operator@12345')">
+          Fill Operator
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { AuthService } from './js/auth.js';
+    import { Toast } from './js/utils.js';
+
+    // Auto-redirect if already authenticated
+    if (AuthService.isAuthenticated()) {
+      window.location.replace('dashboard.html');
+    }
+
+    const form = document.getElementById('login-form');
+    const alertBox = document.getElementById('login-error-alert');
+    const alertMsg = document.getElementById('login-error-message');
+    const btnText = document.getElementById('login-btn-text');
+    const btnSpinner = document.getElementById('login-btn-spinner');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      alertBox.style.display = 'none';
+      btnText.style.display = 'none';
+      btnSpinner.style.display = 'inline-block';
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      try {
+        await AuthService.login(email, password);
+        Toast.success('Authentication successful. Loading security console...');
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 600);
+      } catch (err) {
+        alertBox.style.display = 'flex';
+        alertMsg.textContent = err.message || 'Authentication failed. Please verify credentials.';
+        btnText.style.display = 'inline-block';
+        btnSpinner.style.display = 'none';
+      }
+    });
+
+    window.fillCredentials = function(email, password) {
+      document.getElementById('email').value = email;
+      document.getElementById('password').value = password;
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Safety Thresholds & Settings | AI Crowd & Public Safety System</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="app-sidebar">
+      <div class="sidebar-header">
+        <div class="brand-icon">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">CROWD SAFETY</span>
+          <span class="brand-badge">AI Surveillance</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-category">Surveillance Operations</div>
+        <a href="dashboard.html" class="nav-link">
+          <i class="fas fa-th-large"></i>
+          <span>Command Center</span>
+        </a>
+        <a href="live-monitoring.html" class="nav-link">
+          <i class="fas fa-video"></i>
+          <span>Live Monitoring</span>
+        </a>
+        <a href="cameras.html" class="nav-link">
+          <i class="fas fa-camera-retro"></i>
+          <span>Camera Management</span>
+        </a>
+
+        <div class="nav-category">System Configuration</div>
+        <a href="settings.html" class="nav-link active">
+          <i class="fas fa-sliders"></i>
+          <span>Safety Thresholds</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-profile-badge">
+          <div class="user-avatar" id="current-user-avatar">A</div>
+          <div class="user-info">
+            <div class="user-name" id="current-user-name">System Admin</div>
+            <div class="user-role" id="current-user-role">ADMIN</div>
+          </div>
+          <button class="logout-btn" id="btn-logout" title="Sign Out">
+            <i class="fas fa-arrow-right-from-bracket"></i>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Wrapper -->
+    <div class="main-wrapper">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="mobile-nav-toggle" id="btn-mobile-toggle">
+            <i class="fas fa-bars"></i>
+          </button>
+          <h1 class="page-title">Safety Thresholds & System Calibration</h1>
+        </div>
+        <div class="topbar-right">
+          <span class="badge badge-online">Configuration Active</span>
+        </div>
+      </header>
+
+      <main class="content-body" style="max-width: 900px;">
+        <div class="card">
+          <div style="margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 1rem;">
+            <h2 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.25rem;">Automated Alert Rule Thresholds</h2>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">
+              Configure AI detection tolerances, crowd saturation limits, and hazard verification thresholds stored in PostgreSQL.
+            </p>
+          </div>
+
+          <form id="settings-form">
+            <!-- Crowd Counting & Saturation -->
+            <div style="margin-bottom: 1.5rem;">
+              <h3 style="font-size: 0.95rem; color: var(--accent-cyan); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fas fa-users-viewfinder"></i> Crowd Capacity & Warning Triggers
+              </h3>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+                <div class="form-group">
+                  <label class="form-label" for="crowd_warning_threshold">Crowd Warning Threshold (Headcount)</label>
+                  <input type="number" id="crowd_warning_threshold" class="form-control" min="1" max="500" value="30" required />
+                  <div class="form-text">Triggers yellow safety warning when headcount exceeds this number.</div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="crowd_critical_threshold">Crowd Critical Saturation (Headcount)</label>
+                  <input type="number" id="crowd_critical_threshold" class="form-control" min="1" max="1000" value="50" required />
+                  <div class="form-text">Triggers urgent alert and audible siren indicator.</div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="high_density_threshold">High Density Index (0.1 - 1.0)</label>
+                  <input type="number" step="0.05" min="0.1" max="1.0" id="high_density_threshold" class="form-control" value="0.75" required />
+                  <div class="form-text">Spatial occupancy ratio per square meter.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Congestion & Movement Velocity -->
+            <div style="margin-bottom: 1.5rem; border-top: 1px solid var(--border-subtle); padding-top: 1.25rem;">
+              <h3 style="font-size: 0.95rem; color: var(--accent-cyan); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fas fa-person-walking-arrow-loop-left"></i> Congestion & Velocity Dynamics
+              </h3>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+                <div class="form-group">
+                  <label class="form-label" for="congestion_movement_threshold">Movement Velocity Threshold (m/s)</label>
+                  <input type="number" step="0.1" min="0.1" max="3.0" id="congestion_movement_threshold" class="form-control" value="0.5" required />
+                  <div class="form-text">If average pedestrian speed falls below this, congestion logic arms.</div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="congestion_duration_seconds">Condition Duration (Seconds)</label>
+                  <input type="number" min="5" max="300" id="congestion_duration_seconds" class="form-control" value="15" required />
+                  <div class="form-text">Duration slow movement must persist before alert generates.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Hazard & Specialized Detection (Phase 6+) -->
+            <div style="margin-bottom: 1.75rem; border-top: 1px solid var(--border-subtle); padding-top: 1.25rem;">
+              <h3 style="font-size: 0.95rem; color: var(--accent-cyan); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fas fa-fire-flame-curved"></i> Hazard & Object AI Tolerances
+              </h3>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+                <div class="form-group">
+                  <label class="form-label" for="fire_confidence_threshold">Fire Confidence Threshold (0.1 - 1.0)</label>
+                  <input type="number" step="0.05" min="0.1" max="1.0" id="fire_confidence_threshold" class="form-control" value="0.65" required />
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="smoke_confidence_threshold">Smoke Confidence Threshold (0.1 - 1.0)</label>
+                  <input type="number" step="0.05" min="0.1" max="1.0" id="smoke_confidence_threshold" class="form-control" value="0.60" required />
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="suspicious_object_confidence">Suspicious Object Confidence</label>
+                  <input type="number" step="0.05" min="0.1" max="1.0" id="suspicious_object_confidence" class="form-control" value="0.70" required />
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="abandoned_object_duration_seconds">Abandoned Object Latency (Sec)</label>
+                  <input type="number" min="10" max="600" id="abandoned_object_duration_seconds" class="form-control" value="60" required />
+                  <div class="form-text">Unattended duration before abandoned baggage alert triggers.</div>
+                </div>
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 1rem; border-top: 1px solid var(--border-subtle); padding-top: 1.25rem;">
+              <button type="submit" class="btn btn-primary admin-only">
+                <i class="fas fa-save"></i> Save System Calibration
+              </button>
+            </div>
+          </form>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initSettings } from './js/settings.js';
+    import { AuthService } from './js/auth.js';
+
+    document.getElementById('btn-logout').addEventListener('click', () => {
+      AuthService.logout();
+    });
+
+    const mobileToggle = document.getElementById('btn-mobile-toggle');
+    if (mobileToggle) {
+      mobileToggle.addEventListener('click', () => {
+        document.getElementById('app-sidebar').classList.toggle('open');
+      });
+    }
+
+    initSettings();
+  </script>
+</body>
+</html>
